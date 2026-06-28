@@ -19,9 +19,23 @@ const reviewSchema = new mongoose.Schema(
       required: true,
     },
 
+    //for copy-paste code
     code: {
       type: String,
-      required: true,
+      default:""
+    },
+
+    //Upload file
+    file: {
+      name: {
+        type: String
+      },
+      url: {
+        type: String
+      },
+      size: {
+        type: Number
+      }
     },
 
     aiResponse: {
