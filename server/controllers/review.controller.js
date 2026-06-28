@@ -1,11 +1,13 @@
 import Review from "../model/review.model.js";
 import cloudinary from "../config/cloudanary.config.js";
-
+import reviewCode from "../service/gemini.service.js";
+import axios from "axios";
 
 const createReview = async (req, res) => {
     try {
+
         const userId = req.user._id;
-        const {title, language, code } = req.body || {};
+        const { title, language, code } = req.body || {};
 
         if (!code && !req.file) {
             return res.status(400).json({
@@ -14,7 +16,7 @@ const createReview = async (req, res) => {
         }
 
         let fileData = null;
-
+        let reviewCodeInput = code || "";
         if (req.file) {
             fileData = {
                 name: req.file.originalname,
@@ -22,6 +24,9 @@ const createReview = async (req, res) => {
                 public_id: req.file.filename,
                 size: req.file.size
             };
+
+            const response = await axios.get(req.file.path);
+            reviewCodeInput = response.data;
         }
 
         const review = await Review.create({
@@ -29,14 +34,21 @@ const createReview = async (req, res) => {
             title,
             language,
             code: code || "",
-            file: fileData
+            file: fileData,
+            status: "pending"
         });
+
+        const aiResponse = await reviewCode(reviewCodeInput);
+        console.log(aiResponse);
+
+        review.aiResponse = aiResponse;
+        review.status = "completed";
+        await review.save();
 
         res.status(201).json({
             message: "Review created",
             review
         });
-
     } catch (error) {
         res.status(500).json({
             message: error.message

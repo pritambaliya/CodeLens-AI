@@ -43,11 +43,6 @@ const reviewSchema = new mongoose.Schema(
       default: "",
     },
 
-    overallScore: {
-      type: Number,
-      default: 0,
-    },
-
     status: {
       type: String,
       enum: ["pending", "completed"],
