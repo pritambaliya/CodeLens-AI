@@ -6,6 +6,7 @@ import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import reviewRoutes from "./routes/review.route.js";
+import issueRoutes from "./routes/issue.route.js"
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,7 @@ app.use(
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/reviews", reviewRoutes);
+app.use("/issues", issueRoutes);
 
 
 app.get('/',(req,res)=>{

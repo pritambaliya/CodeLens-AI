@@ -2,6 +2,7 @@ import Review from "../model/review.model.js";
 import cloudinary from "../config/cloudanary.config.js";
 import reviewCode from "../service/gemini.service.js";
 import axios from "axios";
+import saveAIResult from "../service/aiReview.service.js"
 
 const createReview = async (req, res) => {
     try {
@@ -29,6 +30,13 @@ const createReview = async (req, res) => {
             reviewCodeInput = response.data;
         }
 
+        const codeWithLineNumbers = reviewCodeInput
+            .split("\n")
+            .map((line,index)=>{
+                return `${index + 1} | ${line}`;
+            })
+            .join("\n");
+
         const review = await Review.create({
             userId,
             title,
@@ -38,12 +46,26 @@ const createReview = async (req, res) => {
             status: "pending"
         });
 
-        const aiResponse = await reviewCode(reviewCodeInput);
-        console.log(aiResponse);
+        const aiResponseText = await reviewCode(reviewCodeInput);
+        const cleanResponse = aiResponseText
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
 
+        const aiResponse = JSON.parse(cleanResponse);
+        
         review.aiResponse = aiResponse;
+        review.optimization = aiResponse.optimization || "";
+        review.timeComplexity = aiResponse.timeComplexity || {};
+        review.spaceComplexity = aiResponse.spaceComplexity || {};
+        review.betterApproach = aiResponse.betterApproach || "";
+        review.rating = aiResponse.rating || {};
         review.status = "completed";
         await review.save();
+        await saveAIResult(
+            review._id,
+            aiResponse
+        );
 
         res.status(201).json({
             message: "Review created",
@@ -98,17 +120,17 @@ const deleteReview = async (req, res) => {
             userId: req.user._id
         });
 
-        if(!review){
+        if (!review) {
             return res.status(404).json({
-                message:"Review not found"
+                message: "Review not found"
             });
         }
 
-        if(review.file?.public_id){
+        if (review.file?.public_id) {
             await cloudinary.uploader.destroy(
                 review.file.public_id,
                 {
-                    resource_type:"auto"
+                    resource_type: "auto"
                 }
             );
         }
@@ -118,12 +140,12 @@ const deleteReview = async (req, res) => {
         );
 
         res.json({
-            message:"Review and uploaded file deleted"
+            message: "Review and uploaded file deleted"
         });
 
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
-            message:error.message
+            message: error.message
         });
     }
 };

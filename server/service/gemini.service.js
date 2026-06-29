@@ -3,58 +3,108 @@ import model from "../config/gemini.config.js";
 const reviewCode = async (code) => {
 
 const prompt = `
-You are a senior software engineer and code reviewer.
+You are a senior software engineer performing a professional code review.
 
 Analyze the following code:
 
 ${code}
 
 
-Give a concise professional code review.
-
-Rules:
-- Keep answers short and clear.
-- Use bullet points.
-- Avoid unnecessary explanations.
-- Explain only important issues.
-- Make suggestions practical for developers.
+Return ONLY valid JSON.
+Do not use markdown.
+Do not add explanations outside JSON.
 
 
-Format response exactly:
+Response format:
+
+{
+  "issues":[
+    {
+      "type":"Bug | Security | Performance | Best Practice",
+      "severity":"Low | Medium | High",
+      "description":"Clear short explanation of the problem",
+      "lineNumber":"Exact line number from provided code if applicable, otherwise null",
+      "suggestion":"Practical solution or improvement"
+    }
+  ],
 
 
-1. Bugs:
-- List only real bugs or potential issues.
-- If no bugs, write "No bugs found."
+  "optimization":"Short performance or code improvement suggestions",
 
 
-2. Security Issues:
-- Mention security risks.
-- If none, write "No security issues."
+  "timeComplexity":{
+    "bigO":"O(?)",
+    "reason":"Short explanation"
+  },
 
 
-3. Optimization:
-- Give performance improvement suggestions.
+  "spaceComplexity":{
+    "bigO":"O(?)",
+    "reason":"Short explanation"
+  },
 
 
-4. Time Complexity:
-- Give Big-O complexity with one short reason.
+  "betterApproach":"Short description of a better implementation approach",
 
 
-5. Space Complexity:
-- Give Big-O complexity with one short reason.
+  "rating":{
+    "score":1,
+    "reason":"Short professional evaluation"
+  }
+
+}
 
 
-6. Better Approach:
-- Give a better solution idea in short.
+Review rules:
+
+- Identify only real and meaningful issues.
+- Do not create fake problems.
+- Do not report the same issue multiple times.
+- Merge issues that have the same root cause.
+- Return maximum 5 most important issues.
+- Prioritize:
+  1. Security vulnerabilities
+  2. Runtime bugs
+  3. Performance problems
+  4. Important best practices
+
+Issue quality rules:
+
+- Avoid reporting simple formatting or personal coding preferences.
+- Do not mark normal working code as a bug.
+- Suggestions should be practical for developers.
+- Keep descriptions concise and professional.
 
 
-7. Code Quality Rating:
-- Give rating between 1-5.
-- Give one sentence reason.
+Line number rules:
+
+- The code contains line numbers in this format:
+
+  1 | code line
+  2 | code line
+  3 | code line
+
+- Use only these provided line numbers.
+- Never guess line numbers.
+- Never generate your own line numbers.
+- If the issue affects the overall code/design and no exact line exists, use null.
+
+
+Complexity rules:
+
+- Calculate time complexity based on the actual algorithm.
+- Calculate space complexity based on additional memory usage.
+- Do not provide complexity for unrelated operations as a fake optimization.
+
+
+Rating rules:
+
+- Give a score from 1 to 5.
+- Consider correctness, security, performance, and code quality.
 
 
 Code:
+
 ${code}
 `;
 

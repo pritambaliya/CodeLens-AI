@@ -39,8 +39,44 @@ const reviewSchema = new mongoose.Schema(
     },
 
     aiResponse: {
-      type: String,
-      default: "",
+      type:Object,
+      default:{},
+    },
+
+    optimization:{
+        type:String,
+        default:""
+    },
+
+
+    timeComplexity:{
+        bigO:String,
+        reason:String
+    },
+
+
+    spaceComplexity:{
+        bigO:String,
+        reason:String
+    },
+
+
+    betterApproach:{
+        type:String,
+        default:""
+    },
+
+
+    rating:{
+        score:{
+            type:Number,
+            default:0
+        },
+
+        reason:{
+            type:String,
+            default:""
+        }
     },
 
     status: {
