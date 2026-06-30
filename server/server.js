@@ -6,7 +6,10 @@ import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import reviewRoutes from "./routes/review.route.js";
-import issueRoutes from "./routes/issue.route.js"
+import issueRoutes from "./routes/issue.route.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+import reviewHistoryRoutes from "./routes/reviewHistory.routes.js";
+import favoriteRoutes from "./routes/favorite.routes.js";
 
 dotenv.config();
 const app = express();
@@ -25,6 +28,9 @@ app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/issues", issueRoutes);
+app.use("/dashboard", dashboardRoutes);
+app.use("/history", reviewHistoryRoutes);
+app.use("/favorites", favoriteRoutes);
 
 
 app.get('/',(req,res)=>{

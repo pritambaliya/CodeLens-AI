@@ -3,6 +3,8 @@ import cloudinary from "../config/cloudanary.config.js";
 import reviewCode from "../service/gemini.service.js";
 import axios from "axios";
 import saveAIResult from "../service/aiReview.service.js"
+import Issue from "../model/issue.model.js";
+import ReviewHistory from "../model/reviewhistory.model.js"
 
 const createReview = async (req, res) => {
     try {
@@ -32,7 +34,7 @@ const createReview = async (req, res) => {
 
         const codeWithLineNumbers = reviewCodeInput
             .split("\n")
-            .map((line,index)=>{
+            .map((line, index) => {
                 return `${index + 1} | ${line}`;
             })
             .join("\n");
@@ -53,7 +55,7 @@ const createReview = async (req, res) => {
             .trim();
 
         const aiResponse = JSON.parse(cleanResponse);
-        
+
         review.aiResponse = aiResponse;
         review.optimization = aiResponse.optimization || "";
         review.timeComplexity = aiResponse.timeComplexity || {};
@@ -66,6 +68,24 @@ const createReview = async (req, res) => {
             review._id,
             aiResponse
         );
+
+        const lastHistory = await ReviewHistory.findOne({
+            reviewId: review._id
+        })
+            .sort({
+                version: -1
+            });
+        const nextVersion = lastHistory
+            ? lastHistory.version + 1
+            : 1;
+
+        await ReviewHistory.create({
+            reviewId: review._id,
+            version: nextVersion,
+            codeSnapshot: reviewCodeInput,
+            aiResponse: aiResponse,
+            score: aiResponse.rating?.score || 0
+        });
 
         res.status(201).json({
             message: "Review created",
@@ -135,6 +155,10 @@ const deleteReview = async (req, res) => {
             );
         }
 
+        await Issue.deleteMany({
+            reviewId: review._id
+        });
+
         await Review.findByIdAndDelete(
             review._id
         );
@@ -150,4 +174,94 @@ const deleteReview = async (req, res) => {
     }
 };
 
-export { createReview, getReviews, getSingleReview, deleteReview };
+const reviewAgain = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { code, language } = req.body;
+
+        if (!code) {
+            return res.status(400).json({
+                message: "Provide updated code"
+            });
+        }
+
+        const review = await Review.findOne({
+            _id: req.params.reviewId,
+            userId
+        });
+
+        if (!review) {
+            return res.status(404).json({
+                message: "Review not found"
+            });
+        }
+
+        const codeWithLineNumbers = code
+            .split("\n")
+            .map((line, index) => {
+                return `${index + 1} | ${line}`;
+            })
+            .join("\n");
+
+        const aiResponseText = await reviewCode(
+            codeWithLineNumbers
+        );
+
+        const cleanResponse = aiResponseText
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        const aiResponse = JSON.parse(
+            cleanResponse
+        );
+
+        review.code = code;
+        review.language = language || review.language;
+        review.aiResponse = aiResponse;
+        review.optimization = aiResponse.optimization || "";
+        review.timeComplexity = aiResponse.timeComplexity || {};
+        review.spaceComplexity = aiResponse.spaceComplexity || {};
+        review.betterApproach = aiResponse.betterApproach || {};
+        review.rating = aiResponse.rating || {};
+        await review.save();
+
+        await saveAIResult(
+            review._id,
+            aiResponse
+        );
+
+        const lastHistory = await ReviewHistory
+            .findOne({
+                reviewId: review._id
+            })
+            .sort({
+                version: -1
+            });
+
+        const nextVersion = lastHistory
+            ? lastHistory.version + 1
+            : 1;
+
+        await ReviewHistory.create({
+            reviewId: review._id,
+            version: nextVersion,
+            codeSnapshot: code,
+            aiResponse: aiResponse,
+            score: aiResponse.rating?.score || 0
+        });
+
+        res.json({
+            message: "Review updated successfully",
+            version: nextVersion,
+            review
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+export { createReview, getReviews, getSingleReview, deleteReview, reviewAgain };

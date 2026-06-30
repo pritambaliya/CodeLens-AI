@@ -20,8 +20,8 @@ const reviewHistorySchema = new mongoose.Schema(
     },
 
     aiResponse: {
-      type: String,
-      default: "",
+      type: Object,
+      default: {}
     },
 
     score: {
@@ -34,10 +34,9 @@ const reviewHistorySchema = new mongoose.Schema(
   }
 );
 
+const ReviewHistory =
+    mongoose.models.ReviewHistory ||
+    mongoose.model("ReviewHistory",reviewHistorySchema);
 
-const ReviewHistory = mongoose.model(
-  "ReviewHistory",
-  reviewHistorySchema
-);
 
 export default ReviewHistory;
