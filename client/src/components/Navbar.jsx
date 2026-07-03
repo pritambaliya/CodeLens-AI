@@ -122,15 +122,15 @@ export default function Navbar({ variant = 'landing' }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-white/5 bg-background/95 md:hidden"
+            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl"
           >
-            <div className="flex flex-col gap-2 px-4 py-4">
+            <div className="flex flex-col text-center gap-2 px-4 py-4 ">
               {!isDashboard &&
                 NAV_LINKS.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
-                    className="rounded-lg px-3 py-2 text-sm text-text-muted hover:bg-white/5 hover:text-white"
+                    className="rounded-lg px-4 py-4 text-sm text-text-muted hover:bg-white/5 hover:text-white"
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}

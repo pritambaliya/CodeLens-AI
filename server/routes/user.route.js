@@ -1,5 +1,5 @@
 import express from "express";
-import {registerUser, updateProfile, deleteAccount} from "../controllers/user.controller.js";
+import {registerUser, updateProfile, deleteAccount, getProfile} from "../controllers/user.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 import upload from "../middleware/upload.middleware.js";
 
@@ -21,6 +21,12 @@ router.delete(
     "/delete-account",
     authMiddleware,
     deleteAccount
+);
+
+router.get(
+    "/profile",
+    authMiddleware,
+    getProfile
 );
 
 export default router;

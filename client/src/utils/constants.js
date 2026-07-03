@@ -17,6 +17,6 @@ export const MONACO_LANGUAGE_MAP = {
 export const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Technology', href: '#technology' },
+  { label: 'Tech Stack', href: '#tech-stack' },
   { label: 'Testimonials', href: '#testimonials' },
 ];
