@@ -12,158 +12,165 @@ export default function Navbar({ variant = 'landing' }) {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
     setMobileOpen(false);
+    navigate('/');
+  };
+
+  const handleMobileNavigate = (path) => {
+    setMobileOpen(false);
+    navigate(path);
   };
 
   const isDashboard = variant === 'dashboard';
 
   return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="fixed top-0 z-40 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl"
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link to="/" className="group flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-blue-600 shadow-lg shadow-violet-500/30">
-            <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-              />
-            </svg>
-          </div>
-          <span className="text-xl font-bold text-white transition-colors group-hover:text-violet-300">
-            CodeLens
-          </span>
-        </Link>
+    <>
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="fixed top-0 z-[60] w-full border-b border-white/5 bg-background/80 backdrop-blur-xl"
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <Link to="/" className="group flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-blue-600 shadow-lg shadow-violet-500/30">
+              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-white transition-colors group-hover:text-violet-300">
+              CodeLens
+            </span>
+          </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
-          {!isDashboard &&
-            NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-text-muted transition-colors hover:text-white"
-              >
-                {link.label}
-              </a>
-            ))}
+          <div className="hidden items-center gap-8 md:flex">
+            {!isDashboard &&
+              NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-text-muted transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
 
-          {isDashboard && isAuthenticated && (
-            <>
-              <Link
-                to="/dashboard"
-                className="text-sm font-medium text-text-muted transition-colors hover:text-white"
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/reviews/create"
-                className="text-sm font-medium text-text-muted transition-colors hover:text-white"
-              >
-                New Review
-              </Link>
-              <Link
-                to="/profile"
-                className="text-sm font-medium text-text-muted transition-colors hover:text-white"
-              >
-                Profile
-              </Link>
-            </>
-          )}
-        </div>
-
-        <div className="hidden items-center gap-3 md:flex">
-          {isAuthenticated ? (
-            <>
-              <span className="text-sm text-text-muted">
-                Hi, <span className="text-white">{user?.name || 'User'}</span>
-              </span>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
-                Logout
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="ghost" size="sm" to="/login">
-                Login
-              </Button>
-              <Button size="sm" to="/register">
-                Start Free
-              </Button>
-            </>
-          )}
-        </div>
-
-        <button
-          type="button"
-          className="rounded-lg p-2 text-text-muted hover:bg-white/5 hover:text-white md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {mobileOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            {isDashboard && isAuthenticated && (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-sm font-medium text-text-muted transition-colors hover:text-white"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/reviews/create"
+                  className="text-sm font-medium text-text-muted transition-colors hover:text-white"
+                >
+                  New Review
+                </Link>
+                <Link
+                  to="/profile"
+                  className="text-sm font-medium text-text-muted transition-colors hover:text-white"
+                >
+                  Profile
+                </Link>
+              </>
             )}
-          </svg>
-        </button>
-      </div>
+          </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {isAuthenticated ? (
+              <>
+                <span className="text-sm text-text-muted">
+                  Hi, <span className="text-white">{user?.name || 'User'}</span>
+                </span>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" to="/login">
+                  Login
+                </Button>
+                <Button size="sm" to="/register">
+                  Start Free
+                </Button>
+              </>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="rounded-lg p-2 text-text-muted hover:bg-white/5 hover:text-white md:hidden"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+      </motion.nav>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg md:hidden"
           >
-            <div className="flex flex-col text-center gap-2 px-4 py-4 ">
+            <div className="flex h-full flex-col items-center justify-center gap-4 px-6 pt-20">
               {!isDashboard &&
                 NAV_LINKS.map((link) => (
-                  <a
+                  <button
                     key={link.href}
-                    href={link.href}
-                    className="rounded-lg px-4 py-4 text-sm text-text-muted hover:bg-white/5 hover:text-white"
-                    onClick={() => setMobileOpen(false)}
+                    type="button"
+                    onClick={() => handleMobileNavigate(link.href)}
+                    className="w-full rounded-lg px-4 py-4 text-lg text-white hover:bg-white/10"
                   >
                     {link.label}
-                  </a>
+                  </button>
                 ))}
 
               {isDashboard && isAuthenticated && (
                 <>
-                  <Link
-                    to="/dashboard"
-                    className="rounded-lg px-3 py-2 text-sm text-text-muted hover:bg-white/5 hover:text-white"
-                    onClick={() => setMobileOpen(false)}
+                  <button
+                    type="button"
+                    onClick={() => handleMobileNavigate('/dashboard')}
+                    className="w-full rounded-lg px-4 py-4 text-lg text-white hover:bg-white/10"
                   >
                     Dashboard
-                  </Link>
-                  <Link
-                    to="/reviews/create"
-                    className="rounded-lg px-3 py-2 text-sm text-text-muted hover:bg-white/5 hover:text-white"
-                    onClick={() => setMobileOpen(false)}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMobileNavigate('/reviews/create')}
+                    className="w-full rounded-lg px-4 py-4 text-lg text-white hover:bg-white/10"
                   >
                     New Review
-                  </Link>
-                  <Link
-                    to="/profile"
-                    className="rounded-lg px-3 py-2 text-sm text-text-muted hover:bg-white/5 hover:text-white"
-                    onClick={() => setMobileOpen(false)}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMobileNavigate('/profile')}
+                    className="w-full rounded-lg px-4 py-4 text-lg text-white hover:bg-white/10"
                   >
                     Profile
-                  </Link>
+                  </button>
                 </>
               )}
 
-              <div className="mt-2 flex flex-col gap-2 border-t border-white/5 pt-4">
+              <div className="mt-2 flex w-full items-center flex-col gap-2 border-t border-white/5 pt-4">
                 {isAuthenticated ? (
                   <Button variant="ghost" size="sm" onClick={handleLogout}>
                     Logout
@@ -183,6 +190,6 @@ export default function Navbar({ variant = 'landing' }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 }

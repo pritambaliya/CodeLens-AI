@@ -35,7 +35,7 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section id="highlights" className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl px-6">

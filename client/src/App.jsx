@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { Toaster } from 'react-hot-toast';
 import LandingPage from './pages/LandingPage';
 import { AuthProvider } from './context/AuthContext';
+import { useEffect } from "react";
+import RegisterPage from './pages/RegisterPage';
+
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -11,9 +14,24 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </AnimatePresence>
   )
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", 
+    });
+  }, [pathname]);
+
+  return null;
 }
 
 function App() {
@@ -21,6 +39,7 @@ function App() {
   return (
     <BrowserRouter>
     <AuthProvider>
+      <ScrollToTop/>
         <AnimatedRoutes />
         <Toaster
           position="top-right"
