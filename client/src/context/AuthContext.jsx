@@ -34,6 +34,7 @@ export function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     const data = await loginApi(credentials);
+    console.log(data); // <-- Check this
     if (data.token) {
       saveToken(data.token);
     }

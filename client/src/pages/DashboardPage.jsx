@@ -61,7 +61,7 @@ export default function DashboardPage() {
         >
           <div>
             <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-            <p className="mt-1 text-text-muted">Welcome back, {user?.name || 'Developer'}</p>
+            <p className="mt-1 text-text-muted">Welcome back, {user.user.name || 'Developer'}</p>
           </div>
           <Button to="/reviews/create">New Review</Button>
         </motion.div>
@@ -84,15 +84,15 @@ export default function DashboardPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <Card hover={false}>
               <p className="text-sm text-text-muted">Profile</p>
-              <p className="mt-2 truncate text-lg font-semibold text-white">{user?.name}</p>
-              <p className="truncate text-sm text-text-muted">{user?.email}</p>
+              <p className="mt-2 truncate text-lg font-semibold text-white">{user.user.name}</p>
+              <p className="truncate text-sm text-text-muted">{user.user.email}</p>
             </Card>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
             <Card hover={false}>
               <p className="text-sm text-text-muted">Reviews Count</p>
-              <p className="mt-2 text-3xl font-bold text-white">{user?.reviewsCount ?? reviews.length}</p>
+              <p className="mt-2 text-3xl font-bold text-white">{user.user.reviewsCount ?? reviews.length}</p>
             </Card>
           </motion.div>
         </div>

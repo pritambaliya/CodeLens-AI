@@ -22,6 +22,7 @@ export default function Navbar({ variant = 'landing' }) {
   };
 
   const isDashboard = variant === 'dashboard';
+  console.log(user);
 
   return (
     <>
@@ -88,7 +89,7 @@ export default function Navbar({ variant = 'landing' }) {
             {isAuthenticated ? (
               <>
                 <span className="text-sm text-text-muted">
-                  Hi, <span className="text-white">{user?.name || 'User'}</span>
+                  Hi, <span className="text-white">{user.user.name || 'User'}</span>
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>
                   Logout
