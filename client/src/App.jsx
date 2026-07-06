@@ -9,6 +9,9 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
+import CreateReviewPage from './pages/CreateReviewPage';
+import PublicRoute from './components/PublicRoute';
+import ReviewDetailsPage from './pages/ReviewDetailsPage';
 
 
 function AnimatedRoutes() {
@@ -17,10 +20,12 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}/>
+        <Route path="/reviews/create" element={<ProtectedRoute><CreateReviewPage /></ProtectedRoute>}/>
+        <Route path="/reviews/:id" element={<ProtectedRoute><ReviewDetailsPage /></ProtectedRoute>}/>
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}/>
       </Routes>
     </AnimatePresence>

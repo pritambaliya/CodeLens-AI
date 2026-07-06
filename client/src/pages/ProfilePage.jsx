@@ -31,7 +31,6 @@ export default function ProfilePage() {
           getProfile(),
           getFavorites().catch(() => []),
         ]);
-
         setProfile(profileData.user || profileData);
         setFavorites(Array.isArray(favoritesData) ? favoritesData : favoritesData.favorites || []);
       } catch (error) {
@@ -59,14 +58,10 @@ export default function ProfilePage() {
     if (!window.confirm("Are you sure? This action cannot be undone.")) {
       return;
     }
-
     try {
       await deleteProfile();
-
       toast.success("Account deleted");
-
       logout();
-
       navigate("/");
     } catch (err) {
       toast.error(err.response?.data?.message);
@@ -104,15 +99,10 @@ export default function ProfilePage() {
       }
 
       await updateProfile(data);
-
       const updated = await getProfile();
-
       setProfile(updated.user || updated);
-
       await refreshUser();
-
       toast.success("Profile updated");
-
       setEditModalOpen(false);
     } catch (err) {
       toast.error(err.response?.data?.message || "Update failed");

@@ -37,6 +37,15 @@ export default function LoginPage() {
   return (
     <PageTransition className="relative flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <AnimatedBackground />
+      <div className="absolute left-6 top-6 z-20">
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={() => navigate("/")}
+        >
+          ← Back to Home
+        </Button>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

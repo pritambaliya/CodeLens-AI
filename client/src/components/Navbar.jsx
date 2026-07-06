@@ -22,7 +22,6 @@ export default function Navbar({ variant = 'landing' }) {
   };
 
   const isDashboard = variant === 'dashboard';
-  console.log(user);
 
   return (
     <>
