@@ -312,8 +312,8 @@ export default function ProfilePage() {
           ) : (
             <div className="space-y-3">
               {favorites.map((favorite) => {
-                const review = favorite.review || favorite;
-                const reviewId = review._id || review.id || favorite.reviewId;
+                const review = favorite.reviewId || favorite;
+                const reviewId = favorite.reviewId._id;
                 const favoriteId = favorite._id || favorite.id;
 
                 return (

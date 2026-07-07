@@ -20,7 +20,7 @@ router.get(
 
 
 router.delete(
-    "/:reviewId",
+    "/:id",
     authMiddleware,
     removeFavorite
 );

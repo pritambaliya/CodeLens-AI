@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { NAV_LINKS } from '../utils/constants';
 import Button from './Button';
+import LogoutConfirmModal from './ConfirmCard';
 
 export default function Navbar({ variant = 'landing' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -90,9 +92,15 @@ export default function Navbar({ variant = 'landing' }) {
                 <span className="text-sm text-text-muted">
                   Hi, <span className="text-white">{user.user.name || 'User'}</span>
                 </span>
-                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <Button variant="ghost" size="sm" onClick={() => setShowLogoutModal(true)}>
                   Logout
                 </Button>
+
+                <LogoutConfirmModal
+                  open={showLogoutModal}
+                  onClose={() => setShowLogoutModal(false)}
+                  onConfirm={handleLogout}
+                />
               </>
             ) : (
               <>
@@ -172,9 +180,17 @@ export default function Navbar({ variant = 'landing' }) {
 
               <div className="mt-2 flex w-full items-center flex-col gap-2 border-t border-white/5 pt-4">
                 {isAuthenticated ? (
-                  <Button variant="ghost" size="sm" onClick={handleLogout}>
-                    Logout
-                  </Button>
+                  <>
+                  <Button onClick={() => setShowLogoutModal(true)}>
+                  Logout
+                </Button>
+
+                <LogoutConfirmModal
+                  open={showLogoutModal}
+                  onClose={() => setShowLogoutModal(false)}
+                  onConfirm={handleLogout}
+                />
+                </>
                 ) : (
                   <>
                     <Button variant="ghost" size="sm" to="/login">

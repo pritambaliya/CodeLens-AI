@@ -6,7 +6,7 @@ export const getFavorites = async () => {
 };
 
 export const addFavorite = async (reviewId) => {
-  const { data } = await api.post('/favorites', { reviewId });
+  const { data } = await api.post(`/favorites/${reviewId}`);
   return data;
 };
 

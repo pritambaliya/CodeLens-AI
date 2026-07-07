@@ -131,7 +131,7 @@ export default function DashboardPage() {
                         <p className="font-medium text-white">{review.title}</p>
                         <p className="text-sm text-text-muted">
                           {review.language} &middot;{' '}
-                          {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'Recent'}
+                          {review.createdAt ? new Date(review.createdAt).toLocaleDateString("en-GB") : 'Recent'}
                         </p>
                       </div>
                       <svg className="h-5 w-5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -257,9 +257,12 @@ function useFavoriteStatus(reviewId) {
         const data = await getFavorites();
         const favorites = Array.isArray(data) ? data : data.favorites || [];
         const match = favorites.find(
-          (fav) => (fav.reviewId || fav.review?._id || fav.review?.id) === reviewId
+          (fav) => String(fav.reviewId._id) === String(reviewId)
         );
-        if (match) setFavoriteId(match._id || match.id);
+
+        if (match) {
+          setFavoriteId(match._id);
+        }
       } catch {
       }
     })();
@@ -269,7 +272,9 @@ function useFavoriteStatus(reviewId) {
     setIsToggling(true);
     try {
       if (favoriteId) {
-        await removeFavorite(favoriteId);
+        console.log(favoriteId);
+        const response = await removeFavorite(favoriteId);
+        console.log("Delete response:", response);
         setFavoriteId(null);
         toast.success('Removed from favorites');
       } else {

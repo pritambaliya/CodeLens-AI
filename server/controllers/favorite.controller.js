@@ -63,18 +63,23 @@ const getFavorites = async (req, res) => {
 
 const removeFavorite = async (req, res) => {
     try {
-        await Favorite.findOneAndDelete({
+        const deleted = await Favorite.findOneAndDelete({
+            _id: req.params.id,
             userId: req.user._id,
-            reviewId: req.params.reviewId
         });
+
+        if (!deleted) {
+            return res.status(404).json({
+                message: "Favorite not found",
+            });
+        }
 
         res.json({
-            message: "Removed from favorites"
+            message: "Removed from favorites",
         });
-
     } catch (error) {
         res.status(500).json({
-            message: error.message
+            message: error.message,
         });
     }
 };
