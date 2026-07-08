@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { getToken, removeToken, setToken as saveToken } from '../utils/token';
-import { login as loginApi, register as registerApi } from '../services/authService';
+import { login as loginApi, register as registerApi, logout as logoutApi, } from '../services/authService';
 import { getProfile } from '../services/userService';
 
 const AuthContext = createContext(null);
@@ -10,18 +9,11 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
 
     try {
       const profile = await getProfile();
       setUser(profile);
     } catch {
-      removeToken();
       setUser(null);
     } finally {
       setLoading(false);
@@ -34,26 +26,19 @@ export function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     const data = await loginApi(credentials);
-    console.log(data); // <-- Check this
-    if (data.token) {
-      saveToken(data.token);
-    }
-    await fetchUser();
+    setUser(data.user);
     return data;
   };
 
   const register = async (credentials) => {
     const data = await registerApi(credentials);
-    if (data.token) {
-      saveToken(data.token);
-    }
     await fetchUser();
     return data;
   };
 
-  const logout = () => {
-    removeToken();
-    setUser(null);
+  const logout = async () => {
+  await logoutApi();   
+  setUser(null);
   };
 
   const value = useMemo(

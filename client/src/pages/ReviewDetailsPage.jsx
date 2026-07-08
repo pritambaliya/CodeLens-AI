@@ -11,6 +11,8 @@ import PageTransition from '../components/PageTransition';
 import { getReviewById } from '../services/reviewService';
 import { addFavorite, removeFavorite, getFavorites } from '../services/favoriteService';
 import { MONACO_LANGUAGE_MAP } from '../utils/constants';
+import { useNavigate } from "react-router-dom";
+
 
 function Badge({ children, tone = 'neutral' }) {
   const tones = {
@@ -295,8 +297,19 @@ function useFavoriteStatus(reviewId) {
 
 export default function ReviewDetailsPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const { review, loading } = useReview(id);
   const { favoriteId, isToggling, toggleFavorite } = useFavoriteStatus(id);
+
+  const handleReReview = () => {
+    navigate("/reviews/create", {
+      state: {
+        reviewData: review,
+        isReReview: true,
+      },
+    });
+  };
 
   if (loading) {
     return (
@@ -330,6 +343,7 @@ export default function ReviewDetailsPage() {
   };
   const fileName = review.file?.name || `${review.title || 'review'}.${review.language || 'txt'}`;
 
+
   return (
     <PageTransition className="min-h-screen bg-background">
       <Navbar variant="dashboard" />
@@ -349,21 +363,31 @@ export default function ReviewDetailsPage() {
             )}
           </div>
 
-          <div className="flex gap-3">
-            <Button
-              variant={favoriteId ? 'outline' : 'secondary'}
-              size="sm"
-              onClick={toggleFavorite}
-              loading={isToggling}
-              disabled={isToggling}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <button
+              onClick={handleReReview}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
             >
-              <Heart className={`mr-1.5 h-4 w-4 ${favoriteId ? 'fill-current' : ''}`} />
-              {favoriteId ? 'Saved' : 'Save Review'}
-            </Button>
-            <Button variant="ghost" size="sm" to="/dashboard">
-              <ArrowLeft className="mr-1.5 h-4 w-4" />
-              Back
-            </Button>
+              Re-review
+            </button>
+
+            <div className="flex gap-3">
+              <Button
+                variant={favoriteId ? "outline" : "secondary"}
+                size="sm"
+                onClick={toggleFavorite}
+                loading={isToggling}
+                disabled={isToggling}
+              >
+                <Heart className={`mr-1.5 h-4 w-4 ${favoriteId ? "fill-current" : ""}`} />
+                {favoriteId ? "Saved" : "Save Review"}
+              </Button>
+
+              <Button variant="ghost" size="sm" to="/dashboard">
+                <ArrowLeft className="mr-1.5 h-4 w-4" />
+                Back
+              </Button>
+            </div>
           </div>
         </div>
 
