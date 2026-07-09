@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import CreateReviewPage from './pages/CreateReviewPage';
 import PublicRoute from './components/PublicRoute';
 import ReviewDetailsPage from './pages/ReviewDetailsPage';
+import HistoryDetailPage from './pages/HistoryDetailPage';
 
 
 function AnimatedRoutes() {
@@ -27,6 +28,7 @@ function AnimatedRoutes() {
         <Route path="/reviews/create" element={<ProtectedRoute><CreateReviewPage /></ProtectedRoute>}/>
         <Route path="/reviews/:id" element={<ProtectedRoute><ReviewDetailsPage /></ProtectedRoute>}/>
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}/>
+        <Route path="/review/history/:historyId" element={<ProtectedRoute><HistoryDetailPage /></ProtectedRoute>}/>
       </Routes>
     </AnimatePresence>
   )

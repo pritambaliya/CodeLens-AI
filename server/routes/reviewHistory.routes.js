@@ -1,6 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/auth.middleware.js";
-import {getHistory, getSingleHistory, deleteHistory} from "../controllers/reviewHistory.controller.js";
+import {getHistory, getSingleHistory, deleteHistory, getAllHistory} from "../controllers/reviewHistory.controller.js";
 
 const router = express.Router();
 
@@ -22,6 +22,12 @@ router.delete(
     "/:id",
     authMiddleware,
     deleteHistory
+);
+
+router.get(
+    "/",
+    authMiddleware,
+    getAllHistory
 );
 
 

@@ -305,7 +305,12 @@ export default function ReviewDetailsPage() {
   const handleReReview = () => {
     navigate("/reviews/create", {
       state: {
-        reviewData: review,
+        reviewId: review._id,
+        review: {
+          title: review.title,
+          language: review.language,
+          code: review.code,
+        },
         isReReview: true,
       },
     });
@@ -349,48 +354,52 @@ export default function ReviewDetailsPage() {
       <Navbar variant="dashboard" />
 
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
+        <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+         
+          <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-bold text-white">{review.title}</h1>
+              <h1 className="truncate text-3xl font-bold text-white">
+                {review.title}
+              </h1>
+
               <Badge>{review.language}</Badge>
             </div>
+
             {review.createdAt && (
-              <p className="mt-1.5 flex items-center gap-1.5 text-sm text-text-muted">
-                <Clock className="h-3.5 w-3.5" />
-                {new Date(review.createdAt).toLocaleString('en-GB')}
+              <p className="mt-3 flex items-center gap-2 text-sm text-text-muted">
+                <Clock className="h-4 w-4" />
+                {new Date(review.createdAt).toLocaleDateString("en-GB")}
               </p>
             )}
           </div>
 
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <button
+          <div className="flex flex-wrap items-center gap-3 lg:justify-end">
+            <Button
               onClick={handleReReview}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+              className="bg-primary hover:opacity-90"
             >
               Re-review
-            </button>
+            </Button>
 
-            <div className="flex gap-3">
-              <Button
-                variant={favoriteId ? "outline" : "secondary"}
-                size="sm"
-                onClick={toggleFavorite}
-                loading={isToggling}
-                disabled={isToggling}
-              >
-                <Heart className={`mr-1.5 h-4 w-4 ${favoriteId ? "fill-current" : ""}`} />
-                {favoriteId ? "Saved" : "Save Review"}
-              </Button>
+            <Button
+              variant={favoriteId ? "outline" : "secondary"}
+              onClick={toggleFavorite}
+              loading={isToggling}
+              disabled={isToggling}
+            >
+              <Heart
+                className={`mr-2 h-4 w-4 ${favoriteId ? "fill-current" : ""
+                  }`}
+              />
+              {favoriteId ? "Saved" : "Save Review"}
+            </Button>
 
-              <Button variant="ghost" size="sm" to="/dashboard">
-                <ArrowLeft className="mr-1.5 h-4 w-4" />
-                Back
-              </Button>
-            </div>
+            <Button variant="ghost" to="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
           </div>
         </div>
-
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="lg:col-span-2">
             <Card hover={false} className="overflow-hidden p-0">

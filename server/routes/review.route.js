@@ -36,6 +36,7 @@ router.delete(
 router.post(
     "/:reviewId/review-again",
     authMiddleware,
+    upload.single("file"),
     reviewAgain
 );
 

@@ -62,4 +62,26 @@ const deleteHistory = async (req, res) => {
     }
 };
 
-export { getHistory, getSingleHistory, deleteHistory };
+const getAllHistory = async (req, res) => {
+    try {
+        const histories = await ReviewHistory.find()
+            .populate({
+                path: "reviewId",
+                match: { userId: req.user._id }, 
+                select: "title language userId",
+            })
+            .sort({ createdAt: -1 });
+
+        const filteredHistories = histories.filter(
+            (history) => history.reviewId !== null
+        );
+
+        res.status(200).json(filteredHistories);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+export { getHistory, getSingleHistory, deleteHistory,getAllHistory };

@@ -246,6 +246,126 @@ export const MONACO_LANGUAGE_MAP = {
   bat: "bat",
 };
 
+export const LANG = {
+  // C/C++
+  '.c': 'c',
+  '.cpp': 'cpp',
+  '.cc': 'cpp',
+  '.cxx': 'cpp',
+  '.h': 'cpp',
+  '.hpp': 'cpp',
+
+  // Java
+  '.java': 'java',
+
+  // JavaScript
+  '.js': 'javascript',
+  '.mjs': 'javascript',
+  '.cjs': 'javascript',
+
+  // TypeScript
+  '.ts': 'typescript',
+  '.tsx': 'typescript',
+
+  // Python
+  '.py': 'python',
+
+  // C#
+  '.cs': 'csharp',
+
+  // Go
+  '.go': 'go',
+
+  // Rust
+  '.rs': 'rust',
+
+  // PHP
+  '.php': 'php',
+
+  // Ruby
+  '.rb': 'ruby',
+
+  // Swift
+  '.swift': 'swift',
+
+  // Kotlin
+  '.kt': 'kotlin',
+  '.kts': 'kotlin',
+
+  // Dart
+  '.dart': 'dart',
+
+  // Scala
+  '.scala': 'scala',
+
+  // R
+  '.r': 'r',
+
+  // Perl
+  '.pl': 'perl',
+
+  // Lua
+  '.lua': 'lua',
+
+  // Shell
+  '.sh': 'shell',
+  '.bash': 'shell',
+  '.zsh': 'shell',
+
+  // SQL
+  '.sql': 'sql',
+
+  // HTML
+  '.html': 'html',
+  '.htm': 'html',
+
+  // CSS
+  '.css': 'css',
+  '.scss': 'scss',
+  '.sass': 'scss',
+  '.less': 'less',
+
+  // XML
+  '.xml': 'xml',
+
+  // JSON
+  '.json': 'json',
+
+  // YAML
+  '.yaml': 'yaml',
+  '.yml': 'yaml',
+
+  // Markdown
+  '.md': 'markdown',
+
+  // Docker
+  '.dockerfile': 'dockerfile',
+
+  // GraphQL
+  '.graphql': 'graphql',
+  '.gql': 'graphql',
+
+  // Vue
+  '.vue': 'vue',
+
+  // React JSX
+  '.jsx': 'javascript',
+
+  // Razor
+  '.razor': 'razor',
+
+  // INI / Config
+  '.ini': 'ini',
+  '.cfg': 'ini',
+  '.conf': 'ini',
+
+  // Plain text
+  '.txt': 'plaintext',
+
+  // Log
+  '.log': 'plaintext',
+};
+
 export const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },

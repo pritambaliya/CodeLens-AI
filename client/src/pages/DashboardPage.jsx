@@ -9,17 +9,40 @@ import Loader from '../components/Loader';
 import PageTransition from '../components/PageTransition';
 import { useAuth } from '../hooks/useAuth';
 import { getReviews } from '../services/reviewService';
+import { getAllHistory } from '../services/historyService';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [historyReviews, setHistoryReviews] = useState([]);
+  const [stats, setStats] = useState({
+  totalReviews: 0,
+  normalReviews: 0,
+  reReviews: 0,
+});
+
+useEffect(() => {
+  const fetchHistory = async () => {
+    const history = await getAllHistory();
+
+    setStats({
+      totalReviews: history.length,
+      normalReviews: history.filter(r => r.version === 1).length,
+      reReviews: history.filter(r => r.version > 1).length,
+    });
+  };
+
+  fetchHistory();
+}, []);
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const data = await getReviews();
+        const historyData = await getAllHistory();
         setReviews(Array.isArray(data) ? data : data.reviews || []);
+        setHistoryReviews(historyData);
       } catch (error) {
         toast.error(error.response?.data?.message || 'Failed to load reviews');
       } finally {
@@ -29,6 +52,21 @@ export default function DashboardPage() {
 
     fetchReviews();
   }, []);
+
+  const groupedHistory = historyReviews.reduce((acc, history) => {
+    const reviewId = history.reviewId._id;
+
+    if (!acc[reviewId]) {
+      acc[reviewId] = {
+        review: history.reviewId,
+        histories: [],
+      };
+    }
+
+    acc[reviewId].histories.push(history);
+
+    return acc;
+  }, {});
 
   const languages = useMemo(() => {
     const counts = {};
@@ -68,31 +106,30 @@ export default function DashboardPage() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card hover={false} glow>
+            <Card hover={true} glow>
               <p className="text-sm text-text-muted">Total Reviews</p>
-              <p className="mt-2 text-3xl font-bold gradient-text">{reviews.length}</p>
+              <p className="mt-2 text-3xl font-bold gradient-text">{stats.totalReviews}</p>
             </Card>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-            <Card hover={false}>
+            <Card hover={true} glow>
               <p className="text-sm text-text-muted">Languages Analyzed</p>
               <p className="mt-2 text-3xl font-bold text-white">{languages.length}</p>
             </Card>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <Card hover={false}>
-              <p className="text-sm text-text-muted">Profile</p>
-              <p className="mt-2 truncate text-lg font-semibold text-white">{user.user.name}</p>
-              <p className="truncate text-sm text-text-muted">{user.user.email}</p>
+            <Card hover={true} glow>
+              <p className="text-sm text-text-muted">Reviews Count</p>
+              <p className="mt-2 text-3xl font-bold text-white">{stats.normalReviews}</p>
             </Card>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-            <Card hover={false}>
-              <p className="text-sm text-text-muted">Reviews Count</p>
-              <p className="mt-2 text-3xl font-bold text-white">{user.user.reviewsCount ?? reviews.length}</p>
+            <Card hover={true} glow>
+              <p className="text-sm text-text-muted">Re-Reviews Count</p>
+              <p className="mt-2 text-3xl font-bold text-white">{stats.reReviews}</p>
             </Card>
           </motion.div>
         </div>
@@ -175,6 +212,100 @@ export default function DashboardPage() {
             </Card>
           </motion.div>
         </div>
+
+        <div className="mt-8">
+          <Card hover={false}>
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  History of Code
+                </h2>
+                <p className="mt-1 text-sm text-text-muted">
+                  Browse all previous versions of your code reviews.
+                </p>
+              </div>
+            </div>
+
+            {Object.keys(groupedHistory).length === 0 ? (
+              <div className="py-12 text-center">
+                <p className="text-text-muted">
+                  No review history available.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {Object.values(groupedHistory).map((group) => (
+                  <div
+                    key={group.review._id}
+                    className="rounded-xl border border-white/10 bg-white/5 p-5"
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">
+                          {group.review.title}
+                        </h3>
+
+                        <p className="text-sm text-text-muted">
+                          {group.review.language}
+                        </p>
+                      </div>
+
+                      <Link
+                        to={`/reviews/${group.review._id}`}
+                        className="rounded-lg bg-violet-600 px-4 py-2 text-sm text-white transition hover:bg-violet-700"
+                      >
+                        Latest Review
+                      </Link>
+                    </div>
+
+                    <div className="ml-4 space-y-2 border-l border-white/10 pl-4">
+                      {group.histories
+                        .sort((a, b) => b.version - a.version)
+                        .map((history, index) => (
+                          <Link
+                            key={history._id}
+                            to={`/review/history/${history._id}`}
+                            className="flex items-center justify-between rounded-lg bg-white/5 p-3 transition hover:bg-white/10"
+                          >
+                            <div>
+                              <p className="font-medium text-white">
+                                Version {history.version}
+
+                                {index === 0 && (
+                                  <span className="ml-2 rounded bg-green-500/20 px-2 py-1 text-xs text-green-400">
+                                    Latest Snapshot
+                                  </span>
+                                )}
+                              </p>
+
+                              <p className="text-xs text-text-muted">
+                                {new Date(history.createdAt).toLocaleString("en-GB")}
+                              </p>
+                            </div>
+
+                            <svg
+                              className="h-5 w-5 text-text-muted"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </Link>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        </div>
+
       </main>
     </PageTransition>
   );
