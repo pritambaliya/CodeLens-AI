@@ -11,6 +11,7 @@ import { getProfile, updateProfile, deleteProfile } from '../services/userServic
 import { getFavorites } from '../services/favoriteService';
 import { removeFavorite } from '../services/favoriteService';
 import ConfirmModal from '../components/ConfirmCard';
+import { getAllHistory } from '../services/historyService';
 
 export default function ProfilePage() {
   const { user: authUser, refreshUser, logout } = useAuth();
@@ -24,6 +25,11 @@ export default function ProfilePage() {
     email: "",
     avatar: null,
     avatarPreview: "",
+  });
+  const [stats, setStats] = useState({
+    totalReviews: 0,
+    normalReviews: 0,
+    reReviews: 0,
   });
 
   useEffect(() => {
@@ -45,6 +51,21 @@ export default function ProfilePage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const history = await getAllHistory();
+
+      setStats({
+        totalReviews: history.length,
+        normalReviews: history.filter(r => r.version === 1).length,
+        reReviews: history.filter(r => r.version > 1).length,
+      });
+    };
+
+    fetchHistory();
+  }, []);
+
+
   const handleRemoveFavorite = async (favoriteId) => {
     try {
       await removeFavorite(favoriteId);
@@ -57,23 +78,23 @@ export default function ProfilePage() {
 
 
   const handleDeleteAccount = async () => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    await deleteProfile();
+      await deleteProfile();
 
-    toast.success("Account deleted successfully.");
+      toast.success("Account deleted successfully.");
 
-    setShowDeleteAccountModal(false);
+      setShowDeleteAccountModal(false);
 
-    logout();
-    navigate("/");
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Failed to delete account.");
-  } finally {
-    setLoading(false);
-  }
-};
+      logout();
+      navigate("/");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete account.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const displayUser = profile || authUser;
   useEffect(() => {
@@ -174,8 +195,8 @@ export default function ProfilePage() {
                 </p>
 
                 <p className="mt-2 text-sm text-violet-300">
-                  {displayUser?.reviewsCount ?? 0} total review
-                  {displayUser?.reviewsCount !== 1 ? "s" : ""}
+                  {stats.normalReviews || 0} total review
+                  {stats.normalReviews !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>
@@ -308,7 +329,7 @@ export default function ProfilePage() {
 
           <Card hover={false}>
             <h3 className="mb-2 text-sm font-medium text-text-muted">Reviews Count</h3>
-            <p className="text-3xl font-bold gradient-text">{displayUser?.reviewsCount ?? 0}</p>
+            <p className="text-3xl font-bold gradient-text">{stats.normalReviews ?? 0}</p>
           </Card>
 
           <Card hover={false}>
