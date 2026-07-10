@@ -25,10 +25,10 @@ export function AuthProvider({ children }) {
   }, [fetchUser]);
 
   const login = async (credentials) => {
-    const data = await loginApi(credentials);
-    setUser(data.user);
-    return data;
-  };
+  const data = await loginApi(credentials);
+  await fetchUser();
+  return data;
+};
 
   const register = async (credentials) => {
     const data = await registerApi(credentials);
