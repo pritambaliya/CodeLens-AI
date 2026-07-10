@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth';
 import { getProfile, updateProfile, deleteProfile } from '../services/userService';
 import { getFavorites } from '../services/favoriteService';
 import { removeFavorite } from '../services/favoriteService';
+import ConfirmModal from '../components/ConfirmCard';
 
 export default function ProfilePage() {
   const { user: authUser, refreshUser, logout } = useAuth();
@@ -17,6 +18,7 @@ export default function ProfilePage() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -55,18 +57,23 @@ export default function ProfilePage() {
 
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure? This action cannot be undone.")) {
-      return;
-    }
-    try {
-      await deleteProfile();
-      toast.success("Account deleted");
-      logout();
-      navigate("/");
-    } catch (err) {
-      toast.error(err.response?.data?.message);
-    }
-  };
+  try {
+    setLoading(true);
+
+    await deleteProfile();
+
+    toast.success("Account deleted successfully.");
+
+    setShowDeleteAccountModal(false);
+
+    logout();
+    navigate("/");
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to delete account.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const displayUser = profile || authUser;
   useEffect(() => {
@@ -190,10 +197,21 @@ export default function ProfilePage() {
 
             <Button
               variant="danger"
-              onClick={handleDeleteAccount}
+              onClick={() => setShowDeleteAccountModal(true)}
             >
               Delete Account
             </Button>
+            <ConfirmModal
+              open={showDeleteAccountModal}
+              onClose={() => setShowDeleteAccountModal(false)}
+              onConfirm={handleDeleteAccount}
+              loading={loading}
+              title="Delete Account"
+              description="This action cannot be undone."
+              message="Are you sure you want to permanently delete your account? All your reviews, history, and personal data will be permanently removed."
+              confirmText="Delete Account"
+              icon="delete"
+            />
           </div>
 
           {editModalOpen && (

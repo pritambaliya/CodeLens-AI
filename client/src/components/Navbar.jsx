@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { NAV_LINKS } from '../utils/constants';
 import Button from './Button';
-import LogoutConfirmModal from './ConfirmCard';
+import ConfirmModal from './ConfirmCard';
 
 export default function Navbar({ variant = 'landing' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -96,10 +96,15 @@ export default function Navbar({ variant = 'landing' }) {
                   Logout
                 </Button>
 
-                <LogoutConfirmModal
+                <ConfirmModal
                   open={showLogoutModal}
                   onClose={() => setShowLogoutModal(false)}
                   onConfirm={handleLogout}
+                  title="Confirm Logout"
+                  description="You're about to sign out of your account."
+                  message="Are you sure you want to logout? You will need to log in again to access your dashboard and saved reviews."
+                  confirmText="Logout"
+                  icon="logout"
                 />
               </>
             ) : (
@@ -181,16 +186,16 @@ export default function Navbar({ variant = 'landing' }) {
               <div className="mt-2 flex w-full items-center flex-col gap-2 border-t border-white/5 pt-4">
                 {isAuthenticated ? (
                   <>
-                  <Button onClick={() => setShowLogoutModal(true)}>
-                  Logout
-                </Button>
+                    <Button onClick={() => setShowLogoutModal(true)}>
+                      Logout
+                    </Button>
 
-                <LogoutConfirmModal
-                  open={showLogoutModal}
-                  onClose={() => setShowLogoutModal(false)}
-                  onConfirm={handleLogout}
-                />
-                </>
+                    <LogoutConfirmModal
+                      open={showLogoutModal}
+                      onClose={() => setShowLogoutModal(false)}
+                      onConfirm={handleLogout}
+                    />
+                  </>
                 ) : (
                   <>
                     <Button variant="ghost" size="sm" to="/login">

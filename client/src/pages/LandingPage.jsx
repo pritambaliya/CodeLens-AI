@@ -13,20 +13,20 @@ import { useEffect } from 'react';
 export default function LandingPage() {
 
   useEffect(() => {
-  if (performance.navigation.type === 1) {
-    window.location.replace("/");
-  }
-}, []);
+    if (performance.navigation.type === 1) {
+      window.location.replace("/");
+    }
+  }, []);
   return (
     <PageTransition className="min-h-screen bg-background">
       <Navbar variant="landing" />
       <main>
         <HeroSection />
         <FeaturesSection />
-        <HowItWorksSection/>
-        <TechnologySection/>
-        <StatsSection/>
-        <CTASection/>
+        <HowItWorksSection />
+        <TechnologySection />
+        <StatsSection />
+        <CTASection />
       </main>
     </PageTransition>
   );

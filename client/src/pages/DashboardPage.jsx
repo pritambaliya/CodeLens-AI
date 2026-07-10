@@ -8,8 +8,10 @@ import Button from '../components/Button';
 import Loader from '../components/Loader';
 import PageTransition from '../components/PageTransition';
 import { useAuth } from '../hooks/useAuth';
-import { getReviews } from '../services/reviewService';
+import { getReviews, deleteReviewById } from '../services/reviewService';
 import { getAllHistory } from '../services/historyService';
+import { Trash2 } from "lucide-react";
+import ConfirmModal from '../components/ConfirmCard';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -17,24 +19,26 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [historyReviews, setHistoryReviews] = useState([]);
   const [stats, setStats] = useState({
-  totalReviews: 0,
-  normalReviews: 0,
-  reReviews: 0,
-});
+    totalReviews: 0,
+    normalReviews: 0,
+    reReviews: 0,
+  });
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(null);
 
-useEffect(() => {
-  const fetchHistory = async () => {
-    const history = await getAllHistory();
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const history = await getAllHistory();
 
-    setStats({
-      totalReviews: history.length,
-      normalReviews: history.filter(r => r.version === 1).length,
-      reReviews: history.filter(r => r.version > 1).length,
-    });
-  };
+      setStats({
+        totalReviews: history.length,
+        normalReviews: history.filter(r => r.version === 1).length,
+        reReviews: history.filter(r => r.version > 1).length,
+      });
+    };
 
-  fetchHistory();
-}, []);
+    fetchHistory();
+  }, []);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -86,6 +90,41 @@ useEffect(() => {
       </div>
     );
   }
+
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+
+      await deleteReviewById(selectedReviewId);
+
+      setDeleteOpen(false);
+      setSelectedReviewId(null);
+
+      await loadHistory();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete review.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadHistory = async () => {
+    const history = await getAllHistory();
+    setHistoryReviews(history);
+
+    setStats({
+      totalReviews: history.length,
+      normalReviews: history.filter(r => r.version === 1).length,
+      reReviews: history.filter(r => r.version > 1).length,
+    });
+  };
+
+  const loadReviews = async () => {
+    const data = await getReviews();
+    setReviews(Array.isArray(data) ? data : data.reviews || []);
+  };
 
   return (
     <PageTransition className="min-h-screen bg-background">
@@ -250,12 +289,39 @@ useEffect(() => {
                         </p>
                       </div>
 
-                      <Link
-                        to={`/reviews/${group.review._id}`}
-                        className="rounded-lg bg-violet-600 px-4 py-2 text-sm text-white transition hover:bg-violet-700"
-                      >
-                        Latest Review
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <Link
+                          to={`/reviews/${group.review._id}`}
+                          className="rounded-lg bg-violet-600 px-4 py-2 text-sm text-white transition hover:bg-violet-700"
+                        >
+                          Latest Review
+                        </Link>
+
+                        <button
+                          onClick={() => {
+                            setSelectedReviewId(group.review._id);
+                            setDeleteOpen(true);
+                          }}
+                          className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition hover:bg-red-700"
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </button>
+                        <ConfirmModal
+                          open={deleteOpen}
+                          onClose={() => {
+                            setDeleteOpen(false);
+                            setSelectedReviewId(null);
+                          }}
+                          onConfirm={handleDelete}
+                          loading={loading}
+                          title="Delete Review"
+                          description="This action cannot be undone."
+                          message="Are you sure you want to permanently delete this review and all its history?"
+                          confirmText="Delete"
+                          icon="delete"
+                        />
+                      </div>
                     </div>
 
                     <div className="ml-4 space-y-2 border-l border-white/10 pl-4">

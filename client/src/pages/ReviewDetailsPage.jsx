@@ -12,6 +12,7 @@ import { getReviewById } from '../services/reviewService';
 import { addFavorite, removeFavorite, getFavorites } from '../services/favoriteService';
 import { MONACO_LANGUAGE_MAP } from '../utils/constants';
 import { useNavigate } from "react-router-dom";
+import { SUPPORTED_LANGUAGES } from "../utils/constants.js";
 
 
 function Badge({ children, tone = 'neutral' }) {
@@ -299,6 +300,7 @@ export default function ReviewDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+
   const { review, loading } = useReview(id);
   const { favoriteId, isToggling, toggleFavorite } = useFavoriteStatus(id);
 
@@ -346,7 +348,11 @@ export default function ReviewDetailsPage() {
     score: review.rating?.score ?? ai.rating?.score,
     reason: review.rating?.reason ?? ai.rating?.reason,
   };
-  const fileName = review.file?.name || `${review.title || 'review'}.${review.language || 'txt'}`;
+  const language = SUPPORTED_LANGUAGES.find(
+    (lang) => lang.value === review.language
+  );
+  const fileName = review.file?.name || `${review.title || "review"}${language?.extension || ""}`;
+
 
 
   return (
@@ -355,14 +361,14 @@ export default function ReviewDetailsPage() {
 
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-         
+
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="truncate text-3xl font-bold text-white">
                 {review.title}
               </h1>
 
-              <Badge>{review.language}</Badge>
+              <Badge>{language?.label || review.language}</Badge>
             </div>
 
             {review.createdAt && (
