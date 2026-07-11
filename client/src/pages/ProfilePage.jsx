@@ -117,26 +117,35 @@ export default function ProfilePage() {
 
 
   const handleUpdateProfile = async () => {
-    try {
-      const data = new FormData();
+  try {
+    setLoading(true);
 
-      data.append("name", formData.name);
-      data.append("email", formData.email);
+    const data = new FormData();
 
-      if (formData.avatar) {
-        data.append("avatar", formData.avatar);
-      }
+    data.append("name", formData.name);
+    data.append("email", formData.email);
 
-      await updateProfile(data);
-      const updated = await getProfile();
-      setProfile(updated.user || updated);
-      await refreshUser();
-      toast.success("Profile updated");
-      setEditModalOpen(false);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Update failed");
+    if (formData.avatar) {
+      data.append("avatar", formData.avatar);
     }
-  };
+
+    await updateProfile(data);
+
+    const updated = await getProfile();
+    setProfile(updated.user || updated);
+
+    await refreshUser();
+
+    toast.success("Profile updated");
+    setEditModalOpen(false);
+
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Update failed");
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
