@@ -12,11 +12,18 @@ export default function Navbar({ variant = 'landing' }) {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+  try {
+    if (window.google) {
+      google.accounts.id.disableAutoSelect();
+    }
+    await logout(); 
     setMobileOpen(false);
-    navigate('/');
-  };
+    navigate("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const handleMobileNavigate = (path) => {
     setMobileOpen(false);

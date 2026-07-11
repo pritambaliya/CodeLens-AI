@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
       minlength: 6,
       select: false,
     },
@@ -34,6 +33,11 @@ const userSchema = new mongoose.Schema(
         default: "",
       },
     },
+    provider: {
+      type: String,
+      enum: ["local", "google", "github"],
+      default: "local",
+    },
   },
   {
     timestamps: true,
@@ -41,13 +45,9 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) {
-    return;
-  }
-  this.password = await bcrypt.hash(
-    this.password,
-    10
-  );
+  if (!this.password) return;
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

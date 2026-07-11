@@ -12,6 +12,7 @@ import { getFavorites } from '../services/favoriteService';
 import { removeFavorite } from '../services/favoriteService';
 import ConfirmModal from '../components/ConfirmCard';
 import { getAllHistory } from '../services/historyService';
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const { user: authUser, refreshUser, logout } = useAuth();
@@ -76,7 +77,7 @@ export default function ProfilePage() {
     }
   };
 
-
+  const navigate = useNavigate();
   const handleDeleteAccount = async () => {
     try {
       setLoading(true);

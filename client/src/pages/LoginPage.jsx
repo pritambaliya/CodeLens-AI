@@ -40,9 +40,6 @@ export default function LoginPage() {
     window.location.href = "http://localhost:5000/auth/google";
   };
 
-  const handleGithubLogin = () => {
-    window.location.href = "http://localhost:5000/auth/github";
-  };
   return (
     <PageTransition className="relative flex min-h-screen items-center justify-center bg-background px-4">
       <AnimatedBackground />
@@ -95,7 +92,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="glass-card glow-purple space-y-5 rounded-2xl p-8">
+        <form onSubmit={handleSubmit}  className="glass-card glow-purple space-y-4 rounded-2xl p-8">
           <div>
             <label htmlFor="email" className="mb-2 block text-sm font-medium text-text-muted">
               Email
@@ -113,9 +110,13 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-2 block text-sm font-medium text-text-muted">
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-text-muted"
+            >
               Password
             </label>
+
             <input
               id="password"
               name="password"
@@ -126,6 +127,15 @@ export default function LoginPage() {
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-text-muted outline-none transition-colors focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50"
               placeholder="Enter your password"
             />
+
+            <div className="mt-2 flex justify-end">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-violet-400 transition hover:text-violet-300"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
 
           <Button
@@ -156,15 +166,6 @@ export default function LoginPage() {
           >
             <FcGoogle size={22} />
             Continue with Google
-          </button>
-
-          <button
-            type="button"
-            onClick={handleGithubLogin}
-            className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white transition hover:border-violet-500/50 hover:bg-white/10"
-          >
-            <FaGithub size={22} />
-            Continue with GitHub
           </button>
 
           <p className="pt-4 text-center text-sm text-text-muted">
