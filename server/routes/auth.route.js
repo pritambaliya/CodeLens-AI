@@ -2,6 +2,7 @@ import express from "express";
 import {login, logout } from "../controllers/auth.controller.js";
 import passport from "../config/passport.js";
 import jwt from "jsonwebtoken";
+import {forgotPassword, verifyOTP, resetPassword} from '../controllers/forgotpass.controller.js'
 
 const router = express.Router();
 
@@ -40,5 +41,11 @@ router.get(
     res.redirect("http://localhost:5173/dashboard");
   }
 );
+
+router.post("/forgot-password", forgotPassword);
+
+router.post("/verify-otp", verifyOTP);
+
+router.post("/reset-password", resetPassword);
 
 export default router;

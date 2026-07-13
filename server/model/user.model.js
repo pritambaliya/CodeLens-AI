@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
+    otp: String,
+    otpExpiry: Date,
+
     avatar: {
       public_id: {
         type: String,
