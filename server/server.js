@@ -10,6 +10,7 @@ import issueRoutes from "./routes/issue.route.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import reviewHistoryRoutes from "./routes/reviewHistory.routes.js";
 import favoriteRoutes from "./routes/favorite.routes.js";
+import chatbot from "./routes/chat.route.js";
 import session from "express-session";
 import passport from "./config/passport.js";
 
@@ -43,6 +44,7 @@ app.use("/issues", issueRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/history", reviewHistoryRoutes);
 app.use("/favorites", favoriteRoutes);
+app.use("/chatbot", chatbot);
 
 
 app.get('/',(req,res)=>{
