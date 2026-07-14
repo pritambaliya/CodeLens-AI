@@ -1,4 +1,4 @@
-import ReviewHistory from "../model/reviewHistory.model.js";
+import ReviewHistory from "../model/reviewhistory.model.js";
 import Review from "../model/review.model.js";
 
 const getHistory = async (req, res) => {
