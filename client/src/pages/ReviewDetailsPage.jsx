@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import toast from 'react-hot-toast';
 import { Bug, Lightbulb, Gauge, FileCode2, Download, ArrowLeft, Heart, Clock, HardDrive, Sparkles, CircleCheck } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -32,39 +34,139 @@ function Badge({ children, tone = 'neutral' }) {
 
 function AnalysisSection({ title, icon, items, emptyMessage, accent }) {
   const accents = {
-    red: 'border-l-red-400',
-    emerald: 'border-l-emerald-400',
-    amber: 'border-l-amber-400',
+    red: "border-l-red-400",
+    emerald: "border-l-emerald-400",
+    amber: "border-l-amber-400",
   };
+
   const iconTones = {
-    red: 'bg-red-500/15 text-red-400',
-    emerald: 'bg-emerald-500/15 text-emerald-400',
-    amber: 'bg-amber-500/15 text-amber-400',
+    red: "bg-red-500/15 text-red-400",
+    emerald: "bg-emerald-500/15 text-emerald-400",
+    amber: "bg-amber-500/15 text-amber-400",
   };
+
   const hasItems = items && items.length > 0;
 
   return (
     <Card hover={false} className={`border-l-2 ${accents[accent]}`}>
+
       <div className="mb-4 flex items-center gap-3">
-        <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconTones[accent]}`}>
+        <span
+          className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconTones[accent]}`}
+        >
           {icon}
         </span>
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        {hasItems && <Badge tone={accent}>{items.length}</Badge>}
+
+        <h3 className="text-lg font-semibold text-white">
+          {title}
+        </h3>
+
+        {hasItems && (
+          <Badge tone={accent}>
+            {items.length}
+          </Badge>
+        )}
       </div>
 
+
       {!hasItems ? (
-        <div className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/5 p-4 text-sm text-text-muted">
+        <div className="
+          flex items-center gap-2 
+          rounded-xl 
+          border border-white/5 
+          bg-white/5 
+          p-4 
+          text-sm 
+          text-text-muted
+        ">
           <CircleCheck className="h-4 w-4 flex-shrink-0" />
           <span>{emptyMessage}</span>
         </div>
+
       ) : (
+
         <ul className="space-y-3">
           {items.map((item, index) => (
-            <AnalysisListItem key={index} item={item} accent={accent} />
+
+            <li
+              key={index}
+              className="
+                rounded-xl
+                border
+                border-white/5
+                bg-black/20
+                p-4
+                text-sm
+                leading-6
+                text-text-muted
+              "
+            >
+
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+
+                  strong({ children }) {
+                    return (
+                      <span className="
+                        font-semibold
+                        text-white
+                        bg-primary/20
+                        px-1
+                        rounded
+                      ">
+                        {children}
+                      </span>
+                    );
+                  },
+
+
+                  code({ children }) {
+                    return (
+                      <code className="
+                        rounded
+                        bg-black/40
+                        px-2
+                        py-1
+                        text-primary
+                      ">
+                        {children}
+                      </code>
+                    );
+                  },
+
+
+                  p({ children }) {
+                    return (
+                      <p className="mb-2 last:mb-0">
+                        {children}
+                      </p>
+                    );
+                  },
+
+
+                  li({ children }) {
+                    return (
+                      <li className="ml-5 list-disc">
+                        {children}
+                      </li>
+                    );
+                  }
+
+                }}
+              >
+                {typeof item === "string"
+                  ? item
+                  : item.description || item.message}
+              </ReactMarkdown>
+
+            </li>
+
           ))}
         </ul>
+
       )}
+
     </Card>
   );
 }
@@ -429,13 +531,59 @@ export default function ReviewDetailsPage() {
           {summary && (
             <div className="lg:col-span-2">
               <Card hover={false} glow className="border-l-2 border-l-primary">
-                <div className="mb-3 flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
                     <Sparkles className="h-5 w-5" />
                   </span>
-                  <h2 className="text-lg font-semibold text-white">AI Analysis</h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-white">
+                      AI Analysis
+                    </h2>
+                    <p className="text-xs text-text-muted">
+                      Generated by CodeLens AI
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm leading-relaxed text-text-muted">{summary}</p>
+                <div className="rounded-xl bg-black/20 p-4 text-sm leading-7 text-text-muted prose prose-invert max-w-none">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      strong({ children }) {
+                        return (
+                          <span className="font-semibold text-white bg-primary/20 px-1 rounded">
+                            {children}
+                          </span>
+                        );
+                      },
+
+                      p({ children }) {
+                        return (
+                          <p className="mb-4 last:mb-0">
+                            {children}
+                          </p>
+                        );
+                      },
+
+                      li({ children }) {
+                        return (
+                          <li className="ml-5 list-disc">
+                            {children}
+                          </li>
+                        );
+                      },
+
+                      code({ children }) {
+                        return (
+                          <code className="rounded bg-black/40 px-2 py-1 text-primary">
+                            {children}
+                          </code>
+                        );
+                      }
+                    }}
+                  >
+                    {summary}
+                  </ReactMarkdown>
+                </div>
               </Card>
             </div>
           )}

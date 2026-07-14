@@ -26,7 +26,7 @@ function AnimatedRoutes() {
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
-          <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}/>
         <Route path="/reviews/create" element={<ProtectedRoute><CreateReviewPage /></ProtectedRoute>}/>
         <Route path="/reviews/:id" element={<ProtectedRoute><ReviewDetailsPage /></ProtectedRoute>}/>
