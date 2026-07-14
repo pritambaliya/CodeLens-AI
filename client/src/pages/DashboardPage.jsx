@@ -10,8 +10,9 @@ import PageTransition from '../components/PageTransition';
 import { useAuth } from '../hooks/useAuth';
 import { getReviews, deleteReviewById } from '../services/reviewService';
 import { getAllHistory } from '../services/historyService';
-import { Trash2 } from "lucide-react";
+import { Bot, Trash2 } from "lucide-react";
 import ConfirmModal from '../components/ConfirmCard';
+import Chatbot from '../components/chatbot/Chatbot';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -25,6 +26,10 @@ export default function DashboardPage() {
   });
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [chats, setChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -369,9 +374,21 @@ export default function DashboardPage() {
                 ))}
               </div>
             )}
+
           </Card>
         </div>
+        <button
+          onClick={() => setOpen(!open)}
+          className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-white shadow-xl transition-all duration-300 hover:scale-110 hover:bg-blue-700"
+        >
+          <Bot size={30} />
+        </button>
 
+        {open && (
+          <Chatbot
+            onClose={() => setOpen(false)}
+          />
+        )}
       </main>
     </PageTransition>
   );
