@@ -17,6 +17,13 @@ import passport from "./config/passport.js";
 dotenv.config();
 const app = express();
 
+app.use(
+  cors({
+    origin:"https://codelens-ai-2v7l.onrender.com",
+    credentials:true
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -29,13 +36,6 @@ app.use(
 );
 
 app.use(passport.initialize());
-
-app.use(
-  cors({
-    origin:"https://codelens-ai-2v7l.onrender.com",
-    credentials:true
-  })
-);
 
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
