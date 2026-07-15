@@ -8,7 +8,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "https://codelens-ai-2v7l.onrender.com/auth/google/callback",
+            callbackURL: "https://codelens-ai-server.onrender.com/auth/google/callback",
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
