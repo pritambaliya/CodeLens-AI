@@ -22,7 +22,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://localhost:5173/login",
+    failureRedirect: "https://codelens-ai-2v7l.onrender.com/login",
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -38,7 +38,7 @@ router.get(
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.redirect("http://localhost:5173/dashboard");
+    res.redirect("https://codelens-ai-2v7l.onrender.com/dashboard");
   }
 );
 

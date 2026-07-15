@@ -32,7 +32,7 @@ app.use(passport.initialize());
 
 app.use(
   cors({
-    origin:"http://localhost:5173",
+    origin:"https://codelens-ai-2v7l.onrender.com",
     credentials:true
   })
 );
