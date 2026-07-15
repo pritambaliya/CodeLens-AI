@@ -30,6 +30,7 @@ router.get(
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
+    console.log("Google user:", req.user)
 
     res.cookie("token", token, {
       httpOnly: true,
