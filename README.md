@@ -57,12 +57,25 @@ It is designed to help students, developers, and teams improve their code faster
 ## 📷 Screenshots
 
 ```
-<img width="1910" height="973" alt="screenshot-1784176293932" src="https://github.com/user-attachments/assets/0584e1dc-cc7e-4dc0-aac8-f8718fdd9e63" />
-<img width="1910" height="973" alt="loginPage" src="https://github.com/user-attachments/assets/174c92dd-de14-4a66-9ead-a7471425deb3" />
-<img width="1910" height="973" alt="Dashboard" src="https://github.com/user-attachments/assets/607f6f8e-9085-4646-92d4-9e16330f5f12" />
-<img width="1910" height="973" alt="AI Assistent" src="https://github.com/user-attachments/assets/6ed1f726-7497-45f2-a0bf-39602eea1fef" />
-<img width="1910" height="973" alt="New Review" src="https://github.com/user-attachments/assets/385208b0-c98a-4727-b6b7-3a3c2ce37734" />
-<img width="817" height="912" alt="Screenshot_16-7-2026_101059_codelens-ai-2v7l onrender com" src="https://github.com/user-attachments/assets/8e23f270-700c-467a-acdf-73a035c40ea8" />
+## 📷 Screenshots
+
+### Home Page
+![Home Page](https://github.com/user-attachments/assets/0584e1dc-cc7e-4dc0-aac8-f8718fdd9e63)
+
+### Login Page
+![Login Page](https://github.com/user-attachments/assets/174c92dd-de14-4a66-9ead-a7471425deb3)
+
+### Dashboard
+![Dashboard](https://github.com/user-attachments/assets/607f6f8e-9085-4646-92d4-9e16330f5f12)
+
+### AI Assistant
+![AI Assistant](https://github.com/user-attachments/assets/6ed1f726-7497-45f2-a0bf-39602eea1fef)
+
+### New Review
+![New Review](https://github.com/user-attachments/assets/385208b0-c98a-4727-b6b7-3a3c2ce37734)
+
+### Mobile View
+![Mobile View](https://github.com/user-attachments/assets/8e23f270-700c-467a-acdf-73a035c40ea8)
 
 ```
 
