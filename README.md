@@ -56,7 +56,6 @@ It is designed to help students, developers, and teams improve their code faster
 
 ## 📷 Screenshots
 
-```
 ## 📷 Screenshots
 
 ### Home Page
@@ -74,12 +73,9 @@ It is designed to help students, developers, and teams improve their code faster
 ### New Review
 ![New Review](https://github.com/user-attachments/assets/385208b0-c98a-4727-b6b7-3a3c2ce37734)
 
-### Mobile View
-![Mobile View](https://github.com/user-attachments/assets/8e23f270-700c-467a-acdf-73a035c40ea8)
+### Display Review
+![Display Review](https://github.com/user-attachments/assets/8e23f270-700c-467a-acdf-73a035c40ea8)
 
-```
-
----
 
 ## 🎯 Future Improvements
 
