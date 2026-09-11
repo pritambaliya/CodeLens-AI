@@ -74,7 +74,7 @@ export default function CreateReviewPage() {
     const lines = form.code.split("\n").length;
 
     if (lines > 500) {
-      toast.error("Code cannot exceed 1000 lines");
+      toast.error("Code cannot exceed 500 lines");
       return;
     }
 
