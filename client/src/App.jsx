@@ -14,7 +14,6 @@ import PublicRoute from './components/PublicRoute';
 import ReviewDetailsPage from './pages/ReviewDetailsPage';
 import HistoryDetailPage from './pages/HistoryDetailPage';
 import {ForgotPassword, ResetPassword} from './pages/ForgotPassword';
-import MaintenancePage from './components/MaintenancePage';
 
 
 function AnimatedRoutes() {
@@ -53,10 +52,6 @@ function ScrollToTop() {
 }
 
 function App() {
-
-  if (import.meta.env.VITE_MAINTENANCE_MODE === "true") {
-    return <MaintenancePage />;
-  }
 
   return (
     <BrowserRouter>
