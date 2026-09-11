@@ -73,15 +73,9 @@ export default function CreateReviewPage() {
 
     const lines = form.code.split("\n").length;
 
-    if (lines > 1000) {
+    if (lines > 500) {
       toast.error("Code cannot exceed 1000 lines");
       return;
-    }
-    
-    if (lines > 600) {
-      toast.warning(
-        `Large code detected (${lines} lines). Review may take longer.`
-      );
     }
 
     if (!form.title.trim()) {
