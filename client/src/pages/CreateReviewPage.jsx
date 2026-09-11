@@ -71,6 +71,13 @@ export default function CreateReviewPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const lines = form.code.split("\n").length;
+
+    if (lines > 500) {
+       toast.error("Code cannot exceed 500 lines");
+       return;
+    }
+
     if (!form.title.trim()) {
       toast.error("Please enter a title");
       return;
